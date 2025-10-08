@@ -16,11 +16,6 @@ Open index.html in your browser for a local preview.
 ## Installation
 No installation required for preview. 
 
-## For development:
-Clone the repo.
-Install dependencies (if any): npm install (assuming Node.js setup).
-Run locally: npm start.
-
 ## Contributing
 Feel free to fork this repo and submit pull requests for improvements.
 Contact
