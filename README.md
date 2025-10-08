@@ -3,8 +3,11 @@ This repository hosts a static preview of the client's website. It provides a si
 
 ## Live Preview
 You can view the live demo of the website here (hosted via GitHub Pages).
-If the site isn't deployed yet:
 
+Preview Website:
+click to preview: https://m-anasnasir.github.io/prodigy-website-preview/
+
+If the site isn't deployed yet:
 Clone this repository: git clone https://github.com/m-anasnasir/prodigy-website-preview.git
 Open index.html in your browser for a local preview.
 
