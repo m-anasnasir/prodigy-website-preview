@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Client Portal - Prodigy</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        // Custom Tailwind configuration
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        'prodigy-blue': '#007BFF',
+                        'prodigy-dark': '#1a202c',
+                        'prodigy-gray': '#4a5568',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-sans bg-slate-50 text-prodigy-gray flex flex-col min-h-screen">
+
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-xl font-bold text-prodigy-dark">
+                LOGO
+            </div>
+            
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="home-page.html" class="text-gray-600 hover:text-prodigy-blue">Home</a>
+                <a href="product.html" class="text-gray-600 hover:text-prodigy-blue">Products</a>
+                <a href="service.html" class="text-gray-600 hover:text-prodigy-blue">Services</a>
+                <!-- <a href="repair.html" class="text-prodigy-blue font-semibold border-b-2 border-prodigy-blue pb-1">Repair</a> -->
+                <a href="repair.html" class="text-gray-600 hover:text-prodigy-blue">Repair</a>
+                <a href="contact-page.html" class="text-gray-600 hover:text-prodigy-blue">Contact</a>
+            </nav>
+            
+            <div>
+                <a href="client-portal-page.html" class="hidden md:inline-block border border-prodigy-blue text-prodigy-blue px-4 py-2 rounded-md hover:bg-prodigy-blue hover:text-white transition">
+                    Client Portal
+                </a>
+                 <button class="md:hidden">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow flex items-center justify-center">
+        <div class="container mx-auto px-6 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold text-prodigy-dark">Secure Client Portal</h1>
+            <p class="mt-4 text-lg">Access your UPS dashboard and manage your services.</p>
+
+            <div class="mt-8 bg-white max-w-md mx-auto p-8 sm:p-10 rounded-2xl shadow-lg">
+                <form action="#" method="POST" class="space-y-6">
+                    <div>
+                        <input type="email" name="email" placeholder="Email address" required class="w-full bg-slate-100 border-transparent rounded-lg p-4 text-base focus:ring-2 focus:ring-prodigy-blue transition">
+                    </div>
+                    <div>
+                        <input type="password" name="password" placeholder="Password" required class="w-full bg-slate-100 border-transparent rounded-lg p-4 text-base focus:ring-2 focus:ring-prodigy-blue transition">
+                    </div>
+                    <div>
+                        <button type="submit" class="w-full bg-prodigy-blue text-white font-bold py-3 rounded-lg hover:bg-blue-600 transition shadow-md">
+                            Login
+                        </button>
+                    </div>
+                </form>
+
+                <p class="mt-8 text-center text-sm">
+                    Don't have an account? 
+                    <a href="#" class="font-semibold text-prodigy-blue hover:underline">Sign up</a>
+                </p>
+            </div>
+        </div>
+    </main>
+
+    </body>
+</html>

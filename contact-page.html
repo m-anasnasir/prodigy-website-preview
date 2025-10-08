@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Client Portal - Prodigy</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        // Custom Tailwind configuration
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        'prodigy-blue': '#007BFF',
+                        'prodigy-dark': '#1a202c',
+                        'prodigy-gray': '#4a5568',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-sans bg-slate-50 text-prodigy-gray flex flex-col min-h-screen">
+
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-xl font-bold text-prodigy-dark">
+                LOGO
+            </div>
+            
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="home-page.html" class="text-gray-600 hover:text-prodigy-blue">Home</a>
+                <a href="product.html" class="text-gray-600 hover:text-prodigy-blue">Products</a>
+                <a href="service.html" class="text-gray-600 hover:text-prodigy-blue">Services</a>
+                <!-- <a href="repair.html" class="text-prodigy-blue font-semibold border-b-2 border-prodigy-blue pb-1">Repair</a> -->
+                <a href="repair.html" class="text-gray-600 hover:text-prodigy-blue">Repair</a>
+                <a href="contact-page.html" class="text-gray-600 hover:text-prodigy-blue">Contact</a>
+            </nav>
+            
+            <div>
+                <a href="client-portal-page.html" class="hidden md:inline-block border border-prodigy-blue text-prodigy-blue px-4 py-2 rounded-md hover:bg-prodigy-blue hover:text-white transition">
+                    Client Portal
+                </a>
+                 <button class="md:hidden">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        <div class="container mx-auto px-6 py-12">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                
+                <section>
+                    <h1 class="text-4xl md:text-5xl font-bold text-prodigy-dark">Get In Touch</h1>
+                    <p class="mt-3 text-prodigy-gray max-w-2xl">We're here to help. Reach out to us with any questions or inquiries, and we'll get back to you promptly.</p>
+
+                    <form action="#" method="POST" class="mt-8 space-y-5">
+                        <div>
+                            <label for="name" class="block text-sm font-medium mb-2">Name</label>
+                            <input id="name" name="name" type="text" placeholder="Your Name" class="w-full bg-white border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-prodigy-blue" />
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-medium mb-2">Email</label>
+                            <input id="email" name="email" type="email" placeholder="you@example.com" class="w-full bg-white border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-prodigy-blue" />
+                        </div>
+                        <div>
+                            <label for="phone" class="block text-sm font-medium mb-2">Phone</label>
+                            <input id="phone" name="phone" type="tel" placeholder="+1 (555) 000-0000" class="w-full bg-white border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-prodigy-blue" />
+                        </div>
+                        <div>
+                            <label for="message" class="block text-sm font-medium mb-2">Message</label>
+                            <textarea id="message" name="message" rows="5" placeholder="How can we help?" class="w-full bg-white border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-prodigy-blue"></textarea>
+                        </div>
+                        <button type="submit" class="w-full md:w-auto bg-prodigy-blue text-white font-semibold px-6 py-3 rounded-lg hover:bg-blue-600 transition shadow-sm">Send Message</button>
+                    </form>
+                </section>
+
+                <aside>
+                    <h2 class="text-2xl font-semibold text-prodigy-dark">Our Office</h2>
+                    <ul class="mt-6 space-y-4">
+                        <li class="flex items-start space-x-3">
+                            <svg class="w-5 h-5 text-prodigy-blue mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0L4.343 14.657a8 8 0 1113.314 2z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                            <span>123 Power Lane, Electron City, 54321</span>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <svg class="w-5 h-5 text-prodigy-blue mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.213l-2.257 1.129a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.212-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                            <span>(123) 456-7890</span>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <svg class="w-5 h-5 text-prodigy-blue mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12H8m8 0a8 8 0 11-16 0 8 8 0 0116 0z"/></svg>
+                            <span>contact@prodigyups.com</span>
+                        </li>
+                    </ul>
+
+                    <h2 class="mt-10 text-2xl font-semibold text-prodigy-dark">Connect With Us</h2>
+                    <div class="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <a href="#" class="bg-white border border-gray-200 rounded-xl p-6 flex flex-col items-center justify-center text-center hover:shadow-md transition">
+                            <svg class="w-7 h-7 text-prodigy-blue" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm3.543 8.75c-.107-.238-.22-.244-.322-.249-.083-.004-.178-.004-.273-.004s-.25.036-.381.178c-.131.142-.5.491-.5 1.197 0 .706.513 1.388.585 1.482.072.094.986 1.581 2.379 2.151 1.179.464 1.417.372 1.673.349.256-.023.823-.335.94-.658.117-.323.117-.6.082-.658-.036-.058-.131-.094-.273-.165-.142-.071-.823-.405-.949-.451-.126-.047-.218-.071-.313.071-.095.142-.361.451-.442.542-.081.091-.162.103-.304.036-.142-.067-.6-.221-1.145-.705-.423-.378-.709-.845-.792-.987-.083-.142-.009-.219.062-.29.064-.064.142-.166.214-.249.072-.083.095-.142.142-.237.047-.095.024-.178-.012-.249-.036-.071-.319-.79-.437-1.082-.115-.277-.233-.24-.319-.244-.083-.004-.178-.004-.273-.004s-.25.036-.381.178c-.131.142-.5.491-.5 1.197 0 .706.513 1.388.585 1.482.072.094.986 1.581 2.379 2.151 1.179.464 1.417.372 1.673.349.256-.023.823-.335.94-.658.117-.323.117-.6.082-.658-.036-.058-.131-.094-.273-.165-.142-.071-.823-.405-.949-.451-.126-.047-.218-.071-.313.071-.095.142-.361.451-.442.542-.081.091-.162.103-.304.036-.142-.067-.6-.221-1.145-.705-.423-.378-.709-.845-.792-.987-.083-.142-.009-.219.062-.29.064-.064.142-.166.214-.249.072-.083.095-.142.142-.237.047-.095.024-.178-.012-.249-.036-.071-.319-.79-.437-1.082z"/></svg>
+                            <span class="mt-3 text-sm">WhatsApp</span>
+                        </a>
+                        <a href="#" class="bg-white border border-gray-200 rounded-xl p-6 flex flex-col items-center justify-center text-center hover:shadow-md transition">
+                            <svg class="w-7 h-7 text-prodigy-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.213l-2.257 1.129a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.212-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                            <span class="mt-3 text-sm">Call Us</span>
+                        </a>
+                        <a href="#" class="bg-white border border-gray-200 rounded-xl p-6 flex flex-col items-center justify-center text-center hover:shadow-md transition">
+                            <svg class="w-7 h-7 text-prodigy-blue" fill="currentColor" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723 9.864 9.864 0 01-3.127 1.195 4.924 4.924 0 00-8.384 4.49A13.978 13.978 0 011.671 3.149a4.822 4.822 0 001.523 6.574 4.903 4.903 0 01-2.229-.616v.06a4.935 4.935 0 003.95 4.827 4.996 4.996 0 01-2.224.085 4.936 4.936 0 004.604 3.417A9.867 9.867 0 010 19.54a13.94 13.94 0 007.548 2.209c9.142 0 14.307-7.721 13.995-14.646a10.025 10.025 0 002.46-2.533z"/></svg>
+                            <span class="mt-3 text-sm">Twitter</span>
+                        </a>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </main>
+
+    </body>
+</html>
