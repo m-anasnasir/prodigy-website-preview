@@ -1,28 +1,27 @@
-## Client Website Preview
+# Client Website Preview
 This repository hosts a static preview of the client's website. It provides a simple way to view and test the site's layout, features, and functionality before full deployment.
 
-# Live Preview
+## Live Preview
 You can view the live demo of the website here (hosted via GitHub Pages).
 If the site isn't deployed yet:
 
 Clone this repository: git clone https://github.com/m-anasnasir/prodigy-website-preview.git
 Open index.html in your browser for a local preview.
 
-#Features
+## Features
+- Responsive design for mobile and desktop.
+- Key pages: Home, Product, Services, Repair, Contact and Client Monitoring.
+- Built with HTML, CSS, and JavaScript.
 
-Responsive design for mobile and desktop.
-Key pages: Home, Product, Services, Repair, Contact and Client Monitoring.
-Built with HTML, CSS, and JavaScript.
-
-# Installation
+## Installation
 No installation required for preview. 
 
-# For development:
+## For development:
 Clone the repo.
 Install dependencies (if any): npm install (assuming Node.js setup).
 Run locally: npm start.
 
-Contributing
+## Contributing
 Feel free to fork this repo and submit pull requests for improvements.
 Contact
 For questions or feedback, reach out to anasnasirpk@gmail.com.
