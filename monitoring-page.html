@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>UPS Monitoring Dashboard - Prodigy</title>
+
+	<script src="https://cdn.tailwindcss.com"></script>
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+	<script>
+		// Custom Tailwind configuration (match project theme)
+		tailwind.config = {
+			theme: {
+				extend: {
+					fontFamily: {
+						sans: ['Poppins', 'sans-serif'],
+					},
+					colors: {
+						'prodigy-blue': '#007BFF',
+						'prodigy-dark': '#1a202c',
+						'prodigy-gray': '#4a5568',
+					}
+				}
+			}
+		}
+	</script>
+
+	<!-- Chart.js for visualizations -->
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+
+	<style>
+		/***** Minor custom tweaks *****/
+		.card-gradient-success {
+			background: linear-gradient(135deg, rgba(16,185,129,0.08), rgba(16,185,129,0.02));
+		}
+		.card-gradient-warn {
+			background: linear-gradient(135deg, rgba(245,158,11,0.10), rgba(245,158,11,0.03));
+		}
+		.card-gradient-danger {
+			background: linear-gradient(135deg, rgba(239,68,68,0.10), rgba(239,68,68,0.03));
+		}
+	</style>
+</head>
+<body class="font-sans bg-slate-50 text-prodigy-gray flex flex-col min-h-screen">
+
+	<header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-xl font-bold text-prodigy-dark">
+                LOGO
+            </div>
+            
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="home-page.html" class="text-gray-600 hover:text-prodigy-blue">Home</a>
+                <a href="product.html" class="text-gray-600 hover:text-prodigy-blue">Products</a>
+                <a href="service.html" class="text-gray-600 hover:text-prodigy-blue">Services</a>
+                <!-- <a href="repair.html" class="text-prodigy-blue font-semibold border-b-2 border-prodigy-blue pb-1">Repair</a> -->
+                <a href="repair.html" class="text-gray-600 hover:text-prodigy-blue">Repair</a>
+                <a href="contact-page.html" class="text-gray-600 hover:text-prodigy-blue">Contact</a>
+            </nav>
+            
+            <div>
+                <a href="client-portal-page.html" class="hidden md:inline-block border border-prodigy-blue text-prodigy-blue px-4 py-2 rounded-md hover:bg-prodigy-blue hover:text-white transition">
+                    Client Portal
+                </a>
+                 <button class="md:hidden">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+	<main class="flex-grow">
+		<section class="container mx-auto px-6 py-8">
+			<div class="mb-8">
+				<h1 class="text-3xl md:text-4xl font-bold text-prodigy-dark">Welcome back, [Client Name]</h1>
+				<p class="mt-2 text-prodigy-gray">Real-time overview of UPS health, power, and environment.</p>
+			</div>
+
+			<!-- Top KPI cards -->
+			<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+				<div class="bg-white rounded-xl shadow p-5 card-gradient-success">
+					<div class="flex items-center justify-between">
+						<p class="text-sm uppercase tracking-wide text-gray-500">Status</p>
+						<span id="ups-status-pill" class="text-xs px-2 py-1 rounded-full bg-emerald-100 text-emerald-700">ONLINE</span>
+					</div>
+					<p class="mt-3 text-2xl font-semibold text-prodigy-dark" id="ups-mode">Normal</p>
+					<p class="text-sm text-gray-500">Last event: <span id="ups-last-event">—</span></p>
+				</div>
+
+				<div class="bg-white rounded-xl shadow p-5">
+					<p class="text-sm uppercase tracking-wide text-gray-500">Load</p>
+					<p class="mt-3 text-2xl font-semibold text-prodigy-dark"><span id="ups-load">38</span>%</p>
+					<div class="w-full bg-gray-200 rounded-full h-2 mt-3">
+						<div id="ups-load-bar" class="h-2 rounded-full bg-prodigy-blue"></div>
+					</div>
+				</div>
+
+				<div class="bg-white rounded-xl shadow p-5">
+					<p class="text-sm uppercase tracking-wide text-gray-500">Battery</p>
+					<p class="mt-3 text-2xl font-semibold text-prodigy-dark"><span id="ups-battery">92</span>%</p>
+					<p class="text-sm text-gray-500">Runtime left: <span id="ups-runtime">48</span> min</p>
+				</div>
+
+				<div class="bg-white rounded-xl shadow p-5 card-gradient-warn">
+					<p class="text-sm uppercase tracking-wide text-gray-500">Temperature</p>
+					<p class="mt-3 text-2xl font-semibold text-prodigy-dark"><span id="ups-temp">29</span>°C</p>
+					<p class="text-sm text-gray-500">Ambient: <span id="ups-ambient">24</span>°C</p>
+				</div>
+			</div>
+
+			<!-- Power metrics cards -->
+			<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+				<div class="bg-white rounded-xl shadow p-5">
+					<p class="text-sm uppercase tracking-wide text-gray-500">Input Voltage</p>
+					<p class="mt-2 text-2xl font-semibold text-prodigy-dark"><span id="ups-vin">229</span> V</p>
+					<p class="text-sm text-gray-500">Frequency: <span id="ups-fin">50.0</span> Hz</p>
+				</div>
+				<div class="bg-white rounded-xl shadow p-5">
+					<p class="text-sm uppercase tracking-wide text-gray-500">Output Voltage</p>
+					<p class="mt-2 text-2xl font-semibold text-prodigy-dark"><span id="ups-vout">230</span> V</p>
+					<p class="text-sm text-gray-500">Frequency: <span id="ups-fout">50.0</span> Hz</p>
+				</div>
+				<div class="bg-white rounded-xl shadow p-5">
+					<p class="text-sm uppercase tracking-wide text-gray-500">Alarms</p>
+					<p class="mt-2 text-2xl font-semibold text-prodigy-dark"><span id="ups-alarms">0</span></p>
+					<p class="text-sm text-gray-500">Last updated: <span id="ups-updated">--:--:--</span></p>
+				</div>
+			</div>
+
+			<!-- Charts -->
+			<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+				<div class="bg-white rounded-xl shadow p-5 lg:col-span-2">
+					<div class="flex items-center justify-between mb-2">
+						<h2 class="font-semibold text-prodigy-dark">Load & Temperature (last 30 min)</h2>
+						<div class="flex items-center gap-2">
+							<select id="time-window" class="text-sm border rounded px-2 py-1" aria-label="Select time window">
+								<option value="30">30 min</option>
+								<option value="60">60 min</option>
+								<option value="180">3 hours</option>
+								<option value="1440">24 hours</option>
+							</select>
+							<button id="toggle-charts" type="button" class="text-sm px-3 py-1 rounded border border-gray-300 hover:bg-gray-50" aria-label="Toggle charts">Pause Charts</button>
+						</div>
+					</div>
+					<canvas id="chart-load" height="120"></canvas>
+				</div>
+				<div class="bg-white rounded-xl shadow p-5">
+					<h2 class="font-semibold text-prodigy-dark mb-2">Battery State</h2>
+					<canvas id="chart-battery" height="120"></canvas>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<footer class="bg-gray-100 border-t mt-12">
+        <div class="container mx-auto px-6 py-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="text-prodigy-gray">
+                    <a href="#" class="hover:text-prodigy-blue mr-4">Privacy Policy</a>
+                    <a href="#" class="hover:text-prodigy-blue">Terms of Service</a>
+                </div>
+                <div class="flex space-x-4 my-4 md:my-0">
+                    <a href="#" class="text-gray-500 hover:text-prodigy-blue"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.71v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"></path></svg></a>
+                    <a href="#" class="text-gray-500 hover:text-prodigy-blue"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12c0-5.523-4.477-10-10-10z" clip-rule="evenodd"></path></svg></a>
+                    <a href="#" class="text-gray-500 hover:text-prodigy-blue"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path></svg></a>
+                </div>
+            </div>
+            <div class="text-center text-gray-500 mt-8">
+                <p>&copy; 2025 Prodigy. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+	<!-- <script>
+		/**
+		 * Expected backend payload (GET /api/ups or WebSocket message):
+		 * {
+		 *   status: 'ONLINE' | 'ON_BATTERY' | 'BYPASS' | 'FAULT',
+		 *   mode: 'Normal' | 'Discharging' | 'Charging' | string,
+		 *   lastEvent: string,
+		 *   loadPct: number,              // 0..100
+		 *   batteryPct: number,           // 0..100
+		 *   runtimeMin: number,           // minutes
+		 *   tempC: number,                // °C
+		 *   ambientC: number,             // °C
+		 *   vin: number, fin: number,     // input voltage/frequency
+		 *   vout: number, fout: number,   // output voltage/frequency
+		 *   alarms: number,               // count
+		 *   ts: number                    // epoch ms
+		 * }
+		 */
+
+		const el = (id) => document.getElementById(id);
+
+		function updatePill(status) {
+			const pill = el('ups-status-pill');
+			pill.textContent = status;
+			pill.className = 'text-xs px-2 py-1 rounded-full ' + (
+				status === 'ONLINE' ? 'bg-emerald-100 text-emerald-700' :
+				status === 'ON_BATTERY' ? 'bg-amber-100 text-amber-700' :
+				status === 'BYPASS' ? 'bg-blue-100 text-blue-700' :
+				'bg-rose-100 text-rose-700'
+			);
+		}
+
+		function setText(id, value) { el(id).textContent = value; }
+		function setProgress(id, pct) { el(id).style.width = Math.max(0, Math.min(100, pct)) + '%'; }
+
+		// Charts init
+		const loadCtx = document.getElementById('chart-load').getContext('2d');
+		const batteryCtx = document.getElementById('chart-battery').getContext('2d');
+
+		const timeLabels = [];
+		const loadData = [];
+		const tempData = [];
+		const maxPoints = () => {
+			const minutes = parseInt(document.getElementById('time-window').value, 10);
+			return Math.max(30, Math.min(1440, minutes));
+		};
+
+		const loadChart = new Chart(loadCtx, {
+			type: 'line',
+			data: {
+				labels: timeLabels,
+				datasets: [
+					{
+						label: 'Load %',
+						data: loadData,
+						borderColor: '#007BFF',
+						backgroundColor: 'rgba(0,123,255,0.12)',
+						tension: 0.3,
+						fill: true,
+						pointRadius: 0
+					},
+					{
+						label: 'Temp °C',
+						data: tempData,
+						borderColor: '#F59E0B',
+						backgroundColor: 'rgba(245,158,11,0.12)',
+						tension: 0.3,
+						fill: true,
+						pointRadius: 0,
+						yAxisID: 'y1'
+					}
+				]
+			},
+			options: {
+				responsive: true,
+				maintainAspectRatio: false,
+				scales: {
+					y: {
+						title: { display: true, text: 'Load %' },
+						min: 0, max: 100, grid: { color: 'rgba(0,0,0,0.05)' }
+					},
+					y1: {
+						position: 'right',
+						title: { display: true, text: 'Temp °C' },
+						min: 0, max: 80, grid: { drawOnChartArea: false }
+					},
+					x: { grid: { display: false } }
+				},
+				plugins: { legend: { display: true } }
+			}
+		});
+
+		const batteryChart = new Chart(batteryCtx, {
+			type: 'doughnut',
+			data: {
+				labels: ['Charge', 'Used'],
+				datasets: [{
+					data: [92, 8],
+					backgroundColor: ['#10B981', '#E5E7EB'],
+					borderWidth: 0,
+					cutout: '70%'
+				}]
+			},
+			options: {
+				plugins: { legend: { display: false } },
+				responsive: true,
+				maintainAspectRatio: false
+			}
+		});
+
+		let chartsPaused = false; // pause flag for chart updates
+
+		function pushTimeseriesPoint(ts, loadPct, tempC) {
+			const label = new Date(ts).toLocaleTimeString();
+			timeLabels.push(label);
+			loadData.push(loadPct);
+			tempData.push(tempC);
+			const limit = maxPoints();
+			if (timeLabels.length > limit) {
+				timeLabels.shift();
+				loadData.shift();
+				tempData.shift();
+			}
+			if (!chartsPaused) {
+				loadChart.update('none');
+			}
+		}
+
+		function applySnapshot(s) {
+			updatePill(s.status);
+			setText('ups-mode', s.mode);
+			setText('ups-last-event', s.lastEvent || '—');
+			setText('ups-load', s.loadPct.toFixed(0));
+			setProgress('ups-load-bar', s.loadPct);
+			setText('ups-battery', s.batteryPct.toFixed(0));
+			setText('ups-runtime', s.runtimeMin.toFixed(0));
+			setText('ups-temp', s.tempC.toFixed(0));
+			setText('ups-ambient', s.ambientC.toFixed(0));
+			setText('ups-vin', s.vin.toFixed(0));
+			setText('ups-fin', s.fin.toFixed(1));
+			setText('ups-vout', s.vout.toFixed(0));
+			setText('ups-fout', s.fout.toFixed(1));
+			setText('ups-alarms', s.alarms);
+			setText('ups-updated', new Date(s.ts).toLocaleTimeString());
+
+			batteryChart.data.datasets[0].data = [s.batteryPct, Math.max(0, 100 - s.batteryPct)];
+			if (!chartsPaused) {
+				batteryChart.update('none');
+			}
+
+			pushTimeseriesPoint(s.ts, s.loadPct, s.tempC);
+		}
+
+		// Mock data generator (used until backend/WebSocket available)
+		let mockLoad = 38;
+		let mockBattery = 92;
+		let mockTemp = 29;
+		let onBattery = false;
+		function generateMockSnapshot() {
+			const drift = () => (Math.random() - 0.5) * 3;
+			mockLoad = Math.max(5, Math.min(95, mockLoad + drift()));
+			mockTemp = Math.max(20, Math.min(60, mockTemp + (Math.random() - 0.5)));
+			mockBattery = Math.max(10, Math.min(100, mockBattery + (onBattery ? -Math.random() * 2 : Math.random() * 1)));
+			if (Math.random() < 0.05) onBattery = !onBattery;
+			const status = onBattery ? 'ON_BATTERY' : 'ONLINE';
+			return {
+				status,
+				mode: onBattery ? 'Discharging' : 'Normal',
+				lastEvent: onBattery ? 'Switched to battery' : 'Utility power OK',
+				loadPct: mockLoad,
+				batteryPct: mockBattery,
+				runtimeMin: Math.round((mockBattery / Math.max(10, mockLoad)) * 60),
+				tempC: mockTemp,
+				ambientC: 24 + (Math.random() - 0.5) * 1.5,
+				vin: 228 + (Math.random() - 0.5) * 6,
+				fin: 50 + (Math.random() - 0.5) * 0.2,
+				vout: 230 + (Math.random() - 0.5) * 2,
+				fout: 50 + (Math.random() - 0.5) * 0.1,
+				alarms: Math.random() < 0.02 ? 1 : 0,
+				ts: Date.now()
+			};
+		}
+
+		// Backend integration placeholders / Demo mode switch
+		const DEMO_MODE = true; // set to false to enable live data
+		const WEBSOCKET_URL = null; // e.g. 'wss://api.example.com/ups-stream'
+		const POLL_URL = null; // e.g. '/api/ups'
+
+		function startWebSocketIfAvailable() {
+			if (!WEBSOCKET_URL) return false;
+			try {
+				const ws = new WebSocket(WEBSOCKET_URL);
+				ws.onmessage = (ev) => {
+					try { applySnapshot(JSON.parse(ev.data)); } catch (e) { /* ignore */ }
+				};
+				ws.onerror = () => { /* failover to polling/mock */ };
+				return true;
+			} catch (_) {
+				return false;
+			}
+		}
+
+		async function pollBackendOnce() {
+			if (!POLL_URL) return null;
+			try {
+				const res = await fetch(POLL_URL, { cache: 'no-store' });
+				if (!res.ok) return null;
+				return await res.json();
+			} catch (_) {
+				return null;
+			}
+		}
+
+		function startLoop() {
+			const usingWS = startWebSocketIfAvailable();
+			if (usingWS) return;
+			// Poll backend if available, otherwise use mock
+			setInterval(async () => {
+				const payload = await pollBackendOnce();
+				if (payload) {
+					applySnapshot(payload);
+				} else {
+					applySnapshot(generateMockSnapshot());
+				}
+			}, 5000);
+			// Seed with immediate snapshot for perceived performance
+			applySnapshot(generateMockSnapshot());
+		}
+
+		// Seed charts with finite demo data (no looping)
+		function seedDemoData() {
+			// Reset series
+			timeLabels.length = 0;
+			loadData.length = 0;
+			tempData.length = 0;
+
+			const minutes = maxPoints();
+			const now = Date.now();
+			let baseLoad = 35 + Math.random() * 10;
+			let baseTemp = 28 + Math.random() * 4;
+
+			for (let i = minutes - 1; i >= 0; i--) {
+				const ts = now - i * 60 * 1000;
+				// gentle variation for demo
+				baseLoad += (Math.random() - 0.5) * 1.2;
+				baseTemp += (Math.random() - 0.5) * 0.3;
+				const loadVal = Math.max(5, Math.min(95, baseLoad));
+				const tempVal = Math.max(20, Math.min(60, baseTemp));
+				timeLabels.push(new Date(ts).toLocaleTimeString());
+				loadData.push(Math.round(loadVal));
+				tempData.push(Math.round(tempVal));
+			}
+
+			// Final snapshot for KPIs and battery
+			const lastLoad = loadData[loadData.length - 1];
+			const lastTemp = tempData[tempData.length - 1];
+			const demoBattery = 80 + Math.round(Math.random() * 15);
+			const snapshot = {
+				status: 'ONLINE',
+				mode: 'Normal',
+				lastEvent: 'Demo data loaded',
+				loadPct: lastLoad,
+				batteryPct: Math.min(100, demoBattery),
+				runtimeMin: Math.round((demoBattery / Math.max(10, lastLoad)) * 60),
+				tempC: lastTemp,
+				ambientC: 24,
+				vin: 229,
+				fin: 50.0,
+				vout: 230,
+				fout: 50.0,
+				alarms: 0,
+				ts: now
+			};
+			applySnapshot(snapshot);
+			// Ensure full redraw now that arrays are populated
+			loadChart.update();
+			batteryChart.update();
+		}
+
+		document.getElementById('time-window').addEventListener('change', () => {
+			// Truncate arrays to new window length
+			const limit = maxPoints();
+			while (timeLabels.length > limit) { timeLabels.shift(); loadData.shift(); tempData.shift(); }
+			if (!chartsPaused) {
+				loadChart.update();
+			}
+		});
+
+		// Pause/Resume charts button
+		const toggleBtn = document.getElementById('toggle-charts');
+		if (toggleBtn) {
+			toggleBtn.addEventListener('click', () => {
+				chartsPaused = !chartsPaused;
+				toggleBtn.textContent = chartsPaused ? 'Resume Charts' : 'Pause Charts';
+				// When resuming, sync charts to latest values
+				if (!chartsPaused) {
+					loadChart.update();
+					batteryChart.update();
+				}
+			});
+		}
+
+		if (DEMO_MODE) {
+			seedDemoData();
+			// Regenerate demo series when window changes
+			document.getElementById('time-window').addEventListener('change', seedDemoData);
+		} else {
+			startLoop();
+		}
+	</script> -->
+</body>
+</html>
+
